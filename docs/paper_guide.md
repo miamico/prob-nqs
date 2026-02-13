@@ -34,7 +34,7 @@ This appears as Eq. (4) (paper’s numbering).
 
 For stoquastic Hamiltonians like TFIM in the $\sigma^z$ basis (off-diagonal elements $\le 0$), the ground state can be chosen with **nonnegative real amplitudes**. The paper uses this to model the wavefunction as:
 $$
-\Psi_\theta(v) = \sqrt{p_\theta(v)}\quad\text{with }p_\theta(v)\ge 0,
+\Psi_\theta(v) = \sqrt{p_\theta(v)},\quad p_\theta(v)\ge 0,
 $$
 so the NQS becomes an explicit probability model. The dual-sampling derivation in the supplement relies on exactly this construction. 
 
@@ -50,15 +50,15 @@ E(\theta) = \frac{\langle \Psi_\theta|H|\Psi_\theta\rangle}{\langle\Psi_\theta|\
 $$
 VMC rewrites it as an expectation over samples $v\sim|\Psi_\theta(v)|^2$:
 $$
-E(\theta) = \mathbb{E}_{v\sim|\Psi_\theta(v)|^2}\left[E_{\text{loc}}(v)\right],
+E(\theta) = \mathbb{E}_{v\sim|\Psi_\theta(v)|^2}\left[E_{\mathrm{loc}}(v)\right],
 $$
-where $E_{\text{loc}}(v)=\frac{(H\Psi_\theta)(v)}{\Psi_\theta(v)}$. 
+where $E_{\mathrm{loc}}(v)=\frac{(H\Psi_\theta)(v)}{\Psi_\theta(v)}$. 
 
 ### 2.2 Local energy for TFIM: diagonal + off-diagonal ratios
 
 In the $\sigma^z$ basis, TFIM local energy becomes:
 $$
-E_{\text{loc}}(v)= -J\sum_{\langle i,j\rangle} v_i v_j - \Gamma_x \sum_{i=1}^{N}\frac{\Psi_\theta(v^{(i)})}{\Psi_\theta(v)}.
+E_{\mathrm{loc}}(v)= -J\sum_{\langle i,j\rangle} v_i v_j - \Gamma_x \sum_{i=1}^{N}\frac{\Psi_\theta(v^{(i)})}{\Psi_\theta(v)}.
 $$
 Here $v^{(i)}$ is configuration $v$ with spin $i$ flipped. 
 
@@ -92,7 +92,7 @@ The wavefunction is then $\Psi_\theta(S)=\sqrt{p_\theta(S)}$. (This is the same 
 
 ### 3.2 DBM (deep Boltzmann machine): why it breaks the easy parts
 
-A DBM adds another auxiliary layer $d$, producing a 3-layer undirected model with couplings $v\!\text{-}\!h$ and $h\!\text{-}\!d$. The wavefunction remains $\Psi=\sqrt{p(v)}$, but now:
+A DBM adds another auxiliary layer $d$, producing a 3-layer undirected model with couplings $v-h$ and $h-d$. The wavefunction remains $\Psi=\sqrt{p(v)}$, but now:
 
 * $p(v)$ involves an intractable sum over $(h,d)$,
 * and the ratio $p(v^{(i)})/p(v)$ is **not** analytically reducible the way RBMs are.
@@ -130,7 +130,7 @@ This is the standard **Glauber / heat-bath** update for an Ising-type energy:
 $$
 E(\sigma) = -\frac{1}{2}\sum_{i\neq j}W_{ij}\sigma_i\sigma_j - \sum_i b_i\sigma_i,
 $$
-when $W$ is symmetric. For RBM/DBM graphs, couplings are bipartite (no within-layer edges), so you can also write $E(\sigma)=-\sum_{(i,j)\in\text{edges}} W_{ij}\sigma_i\sigma_j-\sum_i b_i\sigma_i$ without the $\tfrac12$ ambiguity.
+when $W$ is symmetric. For RBM/DBM graphs, couplings are bipartite (no within-layer edges), so you can also write $E(\sigma)=-\sum_{(i,j)\in\mathrm{edges}} W_{ij}\sigma_i\sigma_j-\sum_i b_i\sigma_i$ without the $\tfrac12$ ambiguity.
 
 Under sequential (or properly colored) updates, the stationary distribution is the Boltzmann distribution $p(\sigma)\propto e^{\beta \sum_{ij} W_{ij}\sigma_i\sigma_j + \beta\sum_i b_i\sigma_i}$. **In software reproduction, you should treat the p-computer as an MCMC engine implementing this update kernel.**
 
@@ -205,7 +205,7 @@ From the log above:
 * For hidden bias $b_j$: $O_{b_j}(S)=\tfrac12\tanh\!\left(b_j + (W^\top S)_j\right)$.
 * For weight $W_{ij}$ (when present): $O_{W_{ij}}(S)=\tfrac12 S_i \tanh\!\left(b_j + (W^\top S)_j\right)$.
 
-Because FRBM is sparse, computing all these scales like $O(\#\text{edges})$, not $O(NM)$.
+Because FRBM is sparse, computing all these scales like $O(N_{\mathrm{edges}})$, not $O(NM)$.
 
 ### 6.3 Single-spin-flip ratio for TFIM local energy
 
@@ -229,19 +229,13 @@ The supplement provides concrete CG settings: relative tolerance $10^{-4}$, max 
 
 Given samples $S^{(s)}\sim |\Psi|^2$, define:
 
-* Energy mean: $\bar E = \langle E_{\text{loc}}\rangle$.
+* Energy mean: $\bar E = \langle E_{\mathrm{loc}}\rangle$.
 * Log-derivatives: $O_k^{(s)} = O_k(S^{(s)})$.
 
 Then define:
 
-* “Force” / gradient-like vector:
-  $$
-  f_k = \left\langle O_k E_{\text{loc}}\right\rangle - \left\langle O_k\right\rangle\left\langle E_{\text{loc}}\right\rangle.
-  $$
-* SR metric (covariance / Fisher):
-  $$
-  S_{kl} = \left\langle O_k O_l\right\rangle - \left\langle O_k\right\rangle\left\langle O_l\right\rangle.
-  $$
+* “Force” / gradient-like vector: $f_k = \left\langle O_k E_{\mathrm{loc}}\right\rangle - \left\langle O_k\right\rangle\left\langle E_{\mathrm{loc}}\right\rangle$.
+* SR metric (covariance / Fisher): $S_{kl} = \left\langle O_k O_l\right\rangle - \left\langle O_k\right\rangle\left\langle O_l\right\rangle$.
 
 Regularize with diagonal shift $\lambda$:
 $$
@@ -267,13 +261,13 @@ This is exactly what “matrix-free implicit products” means.
 
 The supplement gives a training hyperparameter summary (Table S1), including:
 
-* $N_\text{iter}=1000$,
+* $N_{\mathrm{iter}}=1000$,
 * $N_s=10{,}000$ outer samples,
 * $N_c=1{,}000$ clamped (inner) samples for dual sampling,
 * cosine-decayed learning rate from $\eta_{\max}=0.1$ to $\eta_{\min}=10^{-5}$,
 * SR diagonal shift $\lambda_0=0.1$ with geometric decay factor $b_0=0.9$,
 * CG tolerance (10^{-4}), max CG iters 500,
-* final evaluation with $N_\text{eval}=10^6$ samples. 
+* final evaluation with $N_{\mathrm{eval}}=10^6$ samples. 
 
 > Practical note: Table S1 is written in the DBM/dual-sampling context; FRBM experiments also report specific iteration counts and sample sizes in the main figure caption (see below).
 
@@ -340,7 +334,7 @@ $$
 $$
 This is Eq. (S.6). 
 
-Plugging into the local energy expression yields the correct $E_{\text{loc}}(v)$ in the limit (Eq. (S.7)). 
+Plugging into the local energy expression yields the correct $E_{\mathrm{loc}}(v)$ in the limit (Eq. (S.7)). 
 
 ### 9.2 The finite-(N_c) issue: square root is nonlinear ⇒ residual bias
 
@@ -362,7 +356,7 @@ Algorithm S1 is the paper’s full “machine-learning quantum Hamiltonians usin
   3. accumulate:
 
      * diagonal energy,
-     * off-diagonal terms via $p_\text{flip}$ estimates,
+     * off-diagonal terms via $p_{\mathrm{flip}}$ estimates,
      * log-derivatives $O$ for SR,
   4. solve SR update and apply $\eta(t)$.
 
@@ -387,7 +381,7 @@ These are explicit in the algorithm.
 
 Then the local energy off-diagonal update is (algorithm line 37):
 $$
-E_{\text{loc}}(v)\leftarrow E_{\text{loc}}(v) + H_{v,v^{(i)}}\big(\sqrt{pflip_i}+\Delta_i\big).
+E_{\mathrm{loc}}(v)\leftarrow E_{\mathrm{loc}}(v) + H_{v,v^{(i)}}\big(\sqrt{pflip_i}+\Delta_i\big).
 $$
 
 
@@ -537,13 +531,13 @@ Below is *pseudocode-level* detail (not an implementation), designed to be direc
 
      * Compute diagonal term $-J\sum_{\langle i,j\rangle} v_i v_j$.
      * Compute all ratios $\Psi(v^{(i)})/\Psi(v)$ using the **analytic FRBM ratio** (Section 6.3).
-     * Form $E_{\text{loc}}(v^{(s)})$.
+     * Form $E_{\mathrm{loc}}(v^{(s)})$.
      * Compute log-derivatives $O_k(v^{(s)})$.
    * Compute sample estimates of $f$ and $S$.
    * Solve $(S+\lambda I)\delta\theta=f$ with CG.
    * Update $\theta\leftarrow \theta - \eta(t)\delta\theta$.
 
-3. After training, freeze $\theta$ and compute energy with $N_\text{eval}=10^6$ samples and blocking error bars (50 bins). 
+3. After training, freeze $\theta$ and compute energy with $N_{\mathrm{eval}}=10^6$ samples and blocking error bars (50 bins). 
 
 ### 14.2 DBM dual-sampling VMC training loop (Algorithm S1 faithful)
 
@@ -552,12 +546,12 @@ Use Algorithm S1 as the blueprint:
 * outer samples $N_s$,
 * inner clamped samples $N_c$,
 * compute $pflip_i$ and $\Delta_i$,
-* compute $E_{\text{loc}}(v)$ including corrected off-diagonal term,
+* compute $E_{\mathrm{loc}}(v)$ including corrected off-diagonal term,
 * compute SR gradients and update parameters. 
 
 Use Table S1 training settings unless you have experiment-specific overrides:
 
-* $N_s=10{,}000$, $N_c=1{,}000$, $N_\text{iter}=1000$, $\eta:0.1\to10^{-5}$, $\lambda_0=0.1$, $b_0=0.9$, CG tol $10^{-4}$, CG max 500, final $10^6$ eval samples. 
+* $N_s=10{,}000$, $N_c=1{,}000$, $N_{\mathrm{iter}}=1000$, $\eta:0.1\to10^{-5}$, $\lambda_0=0.1$, $b_0=0.9$, CG tol $10^{-4}$, CG max 500, final $10^6$ eval samples. 
 
 ---
 
@@ -602,7 +596,7 @@ From the Figure 2 caption you must match:
 
 * FRBM with **k=2 (13 neighbors)**, 
 * $35\times 35$ at $\Gamma_c/J=3.044$, 
-* convergence to **chemical accuracy** threshold $|\Delta E/E_\text{ref}|\le 1.6\times 10^{-3}$ in ~100 iterations, 
+* convergence to **chemical accuracy** threshold $|\Delta E/E_{\mathrm{ref}}|\le 1.6\times 10^{-3}$ in ~100 iterations, 
 * final energy points from **$10^6$** samples, blocking error bars (50 bins), 
 * comparison to CT-PIMC (not required for “rebuild pipeline,” but needed for exact plot match). 
 
