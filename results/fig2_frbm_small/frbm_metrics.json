@@ -1,0 +1,152 @@
+{
+  "config": {
+    "blocking_bins": 10,
+    "eval_samples": 400,
+    "lattice": {
+      "L": 4
+    },
+    "learning_rate": {
+      "eta_max": 0.05,
+      "eta_min": 0.001
+    },
+    "model": {
+      "beta": 1.0,
+      "connectivity_radius": 2,
+      "hidden_multiplier": 1.0,
+      "init_std": 0.02
+    },
+    "n_iterations": 12,
+    "sampling": {
+      "burn_in": 20,
+      "n_samples": 64,
+      "thin": 1
+    },
+    "seed": 7,
+    "sr": {
+      "cg_max_iterations": 200,
+      "cg_tolerance": 0.0001,
+      "damping": 0.0,
+      "diagonal_shift_decay": 0.9,
+      "diagonal_shift_init": 0.1
+    },
+    "tfim": {
+      "J": 1.0,
+      "gamma_x": 3.044
+    }
+  },
+  "final_eval": {
+    "mean": -50.12409438281225,
+    "stderr": 0.28742103680663694
+  },
+  "history": [
+    {
+      "cg_iterations": 10,
+      "cg_residual_norm": 8.87433498609845e-05,
+      "diagonal_shift": 0.1,
+      "energy_mean": -49.23604812468737,
+      "energy_stderr": 0.7401565535240019,
+      "iteration": 0,
+      "learning_rate": 0.05
+    },
+    {
+      "cg_iterations": 10,
+      "cg_residual_norm": 0.0001136835392131508,
+      "diagonal_shift": 0.09000000000000001,
+      "energy_mean": -48.54181450075633,
+      "energy_stderr": 0.5078037285904269,
+      "iteration": 1,
+      "learning_rate": 0.04900757785355519
+    },
+    {
+      "cg_iterations": 11,
+      "cg_residual_norm": 8.546057607328915e-05,
+      "diagonal_shift": 0.08100000000000002,
+      "energy_mean": -47.432087693328626,
+      "energy_stderr": 0.7748604711403868,
+      "iteration": 2,
+      "learning_rate": 0.04611071155436394
+    },
+    {
+      "cg_iterations": 12,
+      "cg_residual_norm": 5.0843786296826777e-05,
+      "diagonal_shift": 0.0729,
+      "energy_mean": -50.058857322870594,
+      "energy_stderr": 0.40723710502847443,
+      "iteration": 3,
+      "learning_rate": 0.04154408798165949
+    },
+    {
+      "cg_iterations": 13,
+      "cg_residual_norm": 4.643579941538128e-05,
+      "diagonal_shift": 0.06561,
+      "energy_mean": -49.66281262751441,
+      "energy_stderr": 0.645839828032392,
+      "iteration": 4,
+      "learning_rate": 0.03567766781854622
+    },
+    {
+      "cg_iterations": 13,
+      "cg_residual_norm": 0.0001154202077640537,
+      "diagonal_shift": 0.05904900000000001,
+      "energy_mean": -49.021665654457976,
+      "energy_stderr": 0.6107978924128614,
+      "iteration": 5,
+      "learning_rate": 0.028986713537695493
+    },
+    {
+      "cg_iterations": 14,
+      "cg_residual_norm": 0.0001028511137658158,
+      "diagonal_shift": 0.05314410000000001,
+      "energy_mean": -49.815945838920804,
+      "energy_stderr": 0.5325512900463982,
+      "iteration": 6,
+      "learning_rate": 0.022013286462304518
+    },
+    {
+      "cg_iterations": 15,
+      "cg_residual_norm": 9.63067780285677e-05,
+      "diagonal_shift": 0.04782969000000001,
+      "energy_mean": -50.35168877389887,
+      "energy_stderr": 0.8476475771981911,
+      "iteration": 7,
+      "learning_rate": 0.015322332181453787
+    },
+    {
+      "cg_iterations": 15,
+      "cg_residual_norm": 0.00013591636154457578,
+      "diagonal_shift": 0.04304672100000001,
+      "energy_mean": -50.997019955025074,
+      "energy_stderr": 0.879711912607623,
+      "iteration": 8,
+      "learning_rate": 0.009455912018340517
+    },
+    {
+      "cg_iterations": 15,
+      "cg_residual_norm": 0.00021724430215285193,
+      "diagonal_shift": 0.03874204890000001,
+      "energy_mean": -49.936581851281424,
+      "energy_stderr": 1.0328140128402927,
+      "iteration": 9,
+      "learning_rate": 0.004889288445636058
+    },
+    {
+      "cg_iterations": 16,
+      "cg_residual_norm": 0.0002414415922293429,
+      "diagonal_shift": 0.03486784401000001,
+      "energy_mean": -49.645557428046594,
+      "energy_stderr": 0.7022657851938816,
+      "iteration": 10,
+      "learning_rate": 0.001992422146444817
+    },
+    {
+      "cg_iterations": 18,
+      "cg_residual_norm": 0.00011501550856972313,
+      "diagonal_shift": 0.031381059609000006,
+      "energy_mean": -49.96198892988451,
+      "energy_stderr": 0.3207077532028433,
+      "iteration": 11,
+      "learning_rate": 0.001
+    }
+  ],
+  "mode": "small"
+}

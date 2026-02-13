@@ -23,9 +23,9 @@ The paper shows that **probabilistic computers** built from networks of stochast
 ### 1.1 Hamiltonian (2D TFIM)
 
 They study the 2D TFIM on an (L\times L) square lattice with periodic boundaries, in the (\sigma^z) computational basis:
-[
+$$
 H = -J \sum_{\langle i,j\rangle} \sigma_i^z \sigma_j^z ;-; \Gamma_x \sum_i \sigma_i^x.
-]
+$$
 This appears as Eq. (4) (paper’s numbering). 
 
 **Basis and configurations.** A basis configuration (v) (they also use (S)) is a vector of (N=L^2) spins (v_i\in{-1,+1}).
@@ -33,9 +33,9 @@ This appears as Eq. (4) (paper’s numbering).
 ### 1.2 Stoquasticity and Perron–Frobenius ⇒ nonnegative ground-state amplitudes
 
 For stoquastic Hamiltonians like TFIM in the (\sigma^z) basis (off-diagonal elements (\le 0)), the ground state can be chosen with **nonnegative real amplitudes**. The paper uses this to model the wavefunction as:
-[
+$$
 \Psi_\theta(v) = \sqrt{p_\theta(v)}\quad\text{with }p_\theta(v)\ge 0,
-]
+$$
 so the NQS becomes an explicit probability model. The dual-sampling derivation in the supplement relies on exactly this construction. 
 
 ---
@@ -45,21 +45,21 @@ so the NQS becomes an explicit probability model. The dual-sampling derivation i
 ### 2.1 Variational energy as an expectation over (|\Psi|^2)
 
 For any parameterized state (\Psi_\theta), the variational energy is:
-[
+$$
 E(\theta) = \frac{\langle \Psi_\theta|H|\Psi_\theta\rangle}{\langle\Psi_\theta|\Psi_\theta\rangle}.
-]
+$$
 VMC rewrites it as an expectation over samples (v\sim|\Psi_\theta(v)|^2):
-[
-E(\theta) = \mathbb{E}*{v\sim|\Psi*\theta|^2}\left[ E_{\text{loc}}(v)\right],
-]
+$$
+E(\theta) = \mathbb{E}*{v\sim|\Psi*\theta|^2}\left$$ E_{\text{loc}}(v)\right$$,
+$$
 where (E_{\text{loc}}(v)=\frac{(H\Psi_\theta)(v)}{\Psi_\theta(v)}). 
 
 ### 2.2 Local energy for TFIM: diagonal + off-diagonal ratios
 
 In the (\sigma^z) basis, TFIM local energy becomes:
-[
+$$
 E_{\text{loc}}(v)= -J\sum_{\langle i,j\rangle} v_i v_j ;-; \Gamma_x \sum_{i=1}^{N}\frac{\Psi_\theta(v^{(i)})}{\Psi_\theta(v)}.
-]
+$$
 Here (v^{(i)}) is configuration (v) with spin (i) flipped. 
 
 **This is the computational heart of everything.** Every training iteration needs:
@@ -75,9 +75,9 @@ Here (v^{(i)}) is configuration (v) with spin (i) flipped.
 ### 3.1 FRBM / sparse RBM definition (the hardware-friendly one)
 
 They use a **Further Restricted Boltzmann Machine (FRBM)** with **strictly local connectivity** to make hardware routing feasible. The RBM “energy” (i.e., negative log unnormalized probability) is:
-[
+$$
 E_\theta(S,h) = -\sum_i a_i S_i ;-;\sum_j b_j h_j ;-;\sum_{\langle i,j\rangle_k} W_{ij} S_i h_j,
-]
+$$
 where (S\in{-1,+1}^N) is the visible layer, (h\in{-1,+1}^M) the hidden layer, and (\langle i,j\rangle_k) restricts connections to nodes within Euclidean distance (k). This is Eq. (5). 
 
 Key hardware parameter:
@@ -85,9 +85,9 @@ Key hardware parameter:
 * They set **(k=2)**, which corresponds to **13 neighbors per spin**. 
 
 The associated probability model is:
-[
+$$
 p_\theta(S)=\frac{1}{Z_\theta}\sum_h e^{-E_\theta(S,h)}.
-]
+$$
 The wavefunction is then (\Psi_\theta(S)=\sqrt{p_\theta(S)}). (This is the same construction used explicitly in the supplement for DBM.) 
 
 ### 3.2 DBM (deep Boltzmann machine): why it breaks the easy parts
@@ -108,28 +108,28 @@ That “ratio intractability” is what their **dual sampling** fixes.
 A p-bit is a binary stochastic unit (\sigma_i\in{-1,+1}) updated according to a local field (I_i). They define the update as:
 
 **Local field**
-[
+$$
 I_i = \sum_j W_{ij}\sigma_j + b_i.
-]
+$$
 **Stochastic update rule**
-[
-\sigma_i = \mathrm{sgn}\big(\tanh(\beta I_i)-r_{[-1,1]}\big),
-]
-where (r_{[-1,1]}) is uniform on ([-1,1]). (Eqs. (8)–(9).) 
+$$
+\sigma_i = \mathrm{sgn}\big(\tanh(\beta I_i)-r_{$$-1,1$$}\big),
+$$
+where (r_{$$-1,1$$}) is uniform on ($$-1,1$$). (Eqs. (8)–(9).) 
 
 Equivalently, this is a Bernoulli draw:
-[
+$$
 \mathbb{P}(\sigma_i=+1)=\frac{1}{2}\big(1+\tanh(\beta I_i)\big),\quad
 \mathbb{P}(\sigma_i=-1)=\frac{1}{2}\big(1-\tanh(\beta I_i)\big),
-]
+$$
 which are Eqs. (10)–(11). 
 
 ### 4.2 Why this samples the intended distribution
 
 This is the standard **Glauber / heat-bath** update for an Ising-type energy:
-[
+$$
 E(\sigma) = -\frac{1}{2}\sum_{i\neq j}W_{ij}\sigma_i\sigma_j - \sum_i b_i\sigma_i,
-]
+$$
 when (W) is symmetric. For RBM/DBM graphs, couplings are bipartite (no within-layer edges), so you can also write (E(\sigma)=-\sum_{(i,j)\in\text{edges}} W_{ij}\sigma_i\sigma_j-\sum_i b_i\sigma_i) without the (\tfrac12) ambiguity.
 
 Under sequential (or properly colored) updates, the stationary distribution is the Boltzmann distribution (p(\sigma)\propto e^{\beta \sum_{ij} W_{ij}\sigma_i\sigma_j + \beta\sum_i b_i\sigma_i}). **In software reproduction, you should treat the p-computer as an MCMC engine implementing this update kernel.**
@@ -176,28 +176,28 @@ Here is the explicit math you should implement (even if the paper doesn’t spel
 ### 6.1 RBM marginal over hidden spins
 
 Given energy
-[
+$$
 E(S,h)= -a^\top S - b^\top h - S^\top W h
-]
+$$
 (with (S_i,h_j\in{\pm1})), the unnormalized visible probability is:
-[
+$$
 \tilde p(S)=\sum_h e^{-E(S,h)}
 = e^{a^\top S}\prod_{j=1}^M \sum_{h_j=\pm1}\exp\left(h_j\left(b_j + (W^\top S)*j\right)\right)
 = e^{a^\top S}\prod*{j=1}^M 2\cosh!\left(b_j + (W^\top S)_j\right).
-]
+$$
 
 Therefore the wavefunction (unnormalized) can be taken as:
-[
+$$
 \Psi(S)\propto \sqrt{\tilde p(S)}
-= \exp!\left(\tfrac12 a^\top S\right)\prod_{j=1}^M \left[2\cosh!\left(b_j + (W^\top S)_j\right)\right]^{1/2}.
-]
+= \exp!\left(\tfrac12 a^\top S\right)\prod_{j=1}^M \left$$2\cosh!\left(b_j + (W^\top S)_j\right)\right$$^{1/2}.
+$$
 
 ### 6.2 Log-derivatives needed for SR / natural gradient
 
 Define the “log-derivative operators”
-[
+$$
 O_k(S)=\frac{\partial}{\partial \theta_k}\log \Psi_\theta(S).
-]
+$$
 
 From the log above:
 
@@ -210,10 +210,10 @@ Because FRBM is sparse, computing all these scales like (O(#\text{edges})), not 
 ### 6.3 Single-spin-flip ratio for TFIM local energy
 
 Let (S^{(i)}) be (S) with (S_i\to -S_i). Then:
-[
+$$
 \frac{\Psi(S^{(i)})}{\Psi(S)}
-= \exp(-a_i S_i)\prod_{j\in \mathcal N(i)} \left[\frac{\cosh!\left(\theta_j(S) - 2W_{ij}S_i\right)}{\cosh!\left(\theta_j(S)\right)}\right]^{1/2}
-]
+= \exp(-a_i S_i)\prod_{j\in \mathcal N(i)} \left$$\frac{\cosh!\left(\theta_j(S) - 2W_{ij}S_i\right)}{\cosh!\left(\theta_j(S)\right)}\right$$^{1/2}
+$$
 where (\theta_j(S)=b_j + \sum_{i'} W_{i'j} S_{i'}) and (\mathcal N(i)) are hidden units connected to visible (i). Sparsity makes (|\mathcal N(i)|) small and local.
 
 **This is the fast path** for FRBM: local energy ratios are analytic and cheap.
@@ -235,23 +235,23 @@ Given samples (S^{(s)}\sim |\Psi|^2), define:
 Then define:
 
 * “Force” / gradient-like vector:
-  [
+  $$
   f_k = \left\langle O_k E_{\text{loc}}\right\rangle - \left\langle O_k\right\rangle\left\langle E_{\text{loc}}\right\rangle.
-  ]
+  $$
 * SR metric (covariance / Fisher):
-  [
+  $$
   S_{kl} = \left\langle O_k O_l\right\rangle - \left\langle O_k\right\rangle\left\langle O_l\right\rangle.
-  ]
+  $$
 
 Regularize with diagonal shift (\lambda):
-[
+$$
 (S+\lambda I),\delta\theta = f.
-]
+$$
 
 Update parameters (sign convention varies; a common one):
-[
+$$
 \theta \leftarrow \theta - \eta,\delta\theta.
-]
+$$
 
 ### 7.2 Matrix-free CG for SR
 
@@ -284,39 +284,39 @@ The supplement gives a training hyperparameter summary (Table S1), including:
 ### 8.1 Where DBM becomes expensive: the ratio in the TFIM local energy
 
 TFIM local energy needs:
-[
+$$
 \frac{\Psi(v^{(i)})}{\Psi(v)} = \sqrt{\frac{p(v^{(i)})}{p(v)}}.
-]
+$$
 But for DBM:
-[
+$$
 p(v)=\sum_{h,d} p(v,h,d)\propto \sum_{h,d}e^{-E(v,h,d)},
-]
+$$
 and that sum is not closed-form.
 
 ### 8.2 The key identity: ratio as a conditional expectation (this is the paper’s core math trick)
 
 Define the *joint* model weight:
-[
+$$
 p_\theta(v,h,d)=\frac{1}{Z_\theta}e^{-E_\theta(v,h,d)}.
-]
+$$
 For a flip at (i), define the energy difference:
-[
+$$
 \Delta E_i(v,h,d) = E_\theta(v^{(i)},h,d)-E_\theta(v,h,d) = 2 I_i(v,h,d), v_i.
-]
+$$
 This is Eq. (S.9). 
 
 Then:
-[
+$$
 \frac{p(v^{(i)})}{p(v)}
-= \mathbb{E}_{(h,d)\sim p(h,d|v)}\left[e^{-\Delta E_i(v,h,d)}\right]
+= \mathbb{E}_{(h,d)\sim p(h,d|v)}\left$$e^{-\Delta E_i(v,h,d)}\right$$
 \equiv r_i(v),
-]
+$$
 which is Eq. (S.13) establishing Eq. (S.7). 
 
 Finally, because (\Psi=\sqrt{p}),
-[
+$$
 \frac{\Psi(v^{(i)})}{\Psi(v)} = \sqrt{r_i(v)}.
-]
+$$
 That’s Eq. (S.5). 
 
 ### 8.3 Why it’s called “dual sampling”
@@ -335,9 +335,9 @@ Because the inner samples are conditional on the same (v), you can reuse them to
 ### 9.1 Unbiasedness in the infinite-inner-sample limit
 
 Let (\hat r_i(v)) be the sample average estimator of (r_i(v)) using (N_c) clamped samples. Under (N_c\to\infty):
-[
+$$
 \hat r_i(v)\to \frac{p(v^{(i)})}{p(v)} \quad\Rightarrow\quad \sqrt{\hat r_i(v)}\to \frac{\Psi(v^{(i)})}{\Psi(v)}.
-]
+$$
 This is Eq. (S.6). 
 
 Plugging into the local energy expression yields the correct (E_{\text{loc}}(v)) in the limit (Eq. (S.7)). 
@@ -376,33 +376,33 @@ Inside Algorithm S1, after accumulating:
 * (pflip_sq_i \leftarrow \frac{1}{N_c}\sum_{k=1}^{N_c} e^{-4 I_i v_i}),
 
 they compute a population variance proxy:
-[
+$$
 \mathrm{Varpop}_i = \frac{pflip_sq_i - (pflip_i)^2}{N_c},
-]
+$$
 and then:
-[
+$$
 \Delta_i = \frac{\mathrm{Varpop}_i}{8,pflip_i \sqrt{pflip_i}}.
-]
+$$
 These are explicit in the algorithm. 
 
 Then the local energy off-diagonal update is (algorithm line 37):
-[
+$$
 E_{\text{loc}}(v)\leftarrow E_{\text{loc}}(v) + H_{v,v^{(i)}}\big(\sqrt{pflip_i}+\Delta_i\big).
-]
+$$
 
 
 For TFIM, (H_{v,v^{(i)}}=-\Gamma_x) (spin-flip matrix element), so this implements the corrected (-\Gamma_x \sum_i (\sqrt{pflip_i}+\Delta_i)) term.
 
-> Interpretation tip: a second-order Taylor approximation of (\mathbb{E}[\sqrt{\hat r}]) produces a correction proportional to (\mathrm{Var}(\hat r)). The algorithm “bakes” that correction into the energy estimator rather than trying to debias the ratio itself.
+> Interpretation tip: a second-order Taylor approximation of (\mathbb{E}$$\sqrt{\hat r}$$) produces a correction proportional to (\mathrm{Var}(\hat r)). The algorithm “bakes” that correction into the energy estimator rather than trying to debias the ratio itself.
 
 ---
 
 ## 11) Parameter counting and sparse connectivity (needed to reproduce Figure 4-type sweeps)
 
 The supplement defines a geometric distance on a periodic lattice by assigning each layer a 2D coordinate system isomorphic to the visible lattice. The distance between neuron (i) at (r_i) and neuron (j) at (r_j) is:
-[
+$$
 d(i,j) = \min_{\delta\in\mathbb{Z}^2}|r_i-r_j + L\cdot \delta|_2,
-]
+$$
 and a connection exists iff (d(i,j)\le k). (Eq. (S.15).) 
 
 They then enumerate parameter counts for sparse RBM vs sparse DBM under this mask (Tables S2 and S3 are referenced right after). 
@@ -458,16 +458,16 @@ You need a graph (G=(V,E)) of p-bits where:
 
 Store:
 
-* `bias[i]` (fixed-point if you want fidelity),
+* `bias$$i$$` (fixed-point if you want fidelity),
 * adjacency lists with `(j, W_ij)` for each node i,
-* current state `sigma[i] ∈ {−1,+1}`.
+* current state `sigma$$i$$ ∈ {−1,+1}`.
 
 ### 13.2 One p-bit update (the core kernel)
 
 For a chosen node (i):
 
 1. compute (I_i=\sum_{j\in \mathcal N(i)} W_{ij}\sigma_j + b_i),
-2. draw uniform (r\in[-1,1]),
+2. draw uniform (r\in$$-1,1$$),
 3. set (\sigma_i = \mathrm{sgn}(\tanh(\beta I_i)-r)).
 
 That is exactly Algorithm S1’s update lines and the Methods equations. 
@@ -674,7 +674,7 @@ If you can do all of the following, you have the same functional understanding a
 * Derive TFIM local energy in (\sigma^z) basis and explain why it reduces to diagonal + flip ratios. 
 * Derive RBM marginalization and implement fast analytic ratios and log-derivatives (Section 6).
 * Explain p-bit dynamics as heat-bath updates and map FRBM/DBM parameters onto the p-bit network fields and couplings. 
-* Re-derive the dual sampling identity (p(v^{(i)})/p(v)=\mathbb{E}_{p(h,d|v)}[e^{-\Delta E_i}]) and show why it yields unbiased local energies in the (N_c\to\infty) limit.  
+* Re-derive the dual sampling identity (p(v^{(i)})/p(v)=\mathbb{E}_{p(h,d|v)}$$e^{-\Delta E_i}$$) and show why it yields unbiased local energies in the (N_c\to\infty) limit.  
 * Implement Algorithm S1 logic exactly (outer/inner loops, (pflip), (\Delta), SR update).  
 * Implement SR with matrix-free CG and match CG tolerances and schedules from Table S1. 
 * Reproduce the Figure 2 protocol numerically (k=2, (35\times35), (\Gamma_c/J=3.044), chemical accuracy threshold, (10^6) eval samples, blocking). 
